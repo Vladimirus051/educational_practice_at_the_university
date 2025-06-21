@@ -1,0 +1,993 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+public/
+  vite.svg
+src/
+  app/
+    providers/
+      with-chakra.tsx
+  entities/
+    Curve/
+      model/
+        use-curve-points.ts
+      ui/
+        Curve.tsx
+      index.ts
+    Primitive/
+      ui/
+        Primitive.tsx
+      index.ts
+  features/
+    AnimatePrimitive/
+      model/
+        use-primitive-animation.ts
+      ui/
+        AnimationControls.tsx
+      index.ts
+    UpdateGraphParams/
+      ui/
+        GraphParamsForm.tsx
+      index.ts
+  pages/
+    GraphPage/
+      ui/
+        GraphPage.tsx
+      index.ts
+  shared/
+    lib/
+      hooks/
+        use-element-size.ts
+    types/
+      index.ts
+  widgets/
+    GraphViewer/
+      ui/
+        GraphViewer.tsx
+      index.ts
+  index.css
+  main.tsx
+  vite-env.d.ts
+.gitignore
+eslint.config.js
+index.html
+package.json
+README.md
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+
+================================================================
+Files
+================================================================
+
+================
+File: public/vite.svg
+================
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+
+================
+File: src/app/providers/with-chakra.tsx
+================
+import { ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
+
+export const withChakra = (component: () => React.ReactNode) => () => (
+  <ChakraProvider>
+    {component()}
+  </ChakraProvider>
+);
+
+================
+File: src/entities/Curve/model/use-curve-points.ts
+================
+import { useMemo } from 'react';
+import { Point } from '@/shared/types';
+
+export interface CurveParams {
+  a: number;
+  l: number;
+  scale: number;
+}
+
+const calculatePascalLimaçonPoint = (t: number, a: number, l: number): Point => {
+  const x = a * Math.cos(2 * t) + l * Math.cos(t);
+  const y = a * Math.sin(2 * t) + l * Math.sin(t);
+  return { x, y };
+};
+
+export const useCurvePoints = (params: CurveParams, sceneWidth: number, sceneHeight: number): Point[] => {
+  return useMemo(() => {
+    const points: Point[] = [];
+    const steps = 500;
+    const centerX = sceneWidth / 2;
+    const centerY = sceneHeight / 2;
+
+    const effectiveScale = (Math.min(sceneWidth, sceneHeight) / 4.5) * (params.scale / 100);
+
+    for (let i = 0; i <= steps; i++) {
+      const t = (i / steps) * 2 * Math.PI;
+      const mathPoint = calculatePascalLimaçonPoint(t, params.a, params.l);
+
+      points.push({
+        x: centerX + mathPoint.x * effectiveScale + params.a * effectiveScale,
+        y: centerY + mathPoint.y * effectiveScale,
+      });
+    }
+    return points;
+  }, [params, sceneWidth, sceneHeight]);
+};
+
+================
+File: src/entities/Curve/ui/Curve.tsx
+================
+import { animated, useSpring } from '@react-spring/konva';
+import { Point } from '@/shared/types';
+
+interface CurveProps {
+  points: Point[];
+}
+
+export const Curve = ({ points }: CurveProps) => {
+  const flatPoints = points.flatMap(p => [p.x, p.y]);
+
+  // НОВОЕ: Создаем пружинную анимацию для свойства 'points'
+  const animatedProps = useSpring({
+    points: flatPoints,
+    config: { mass: 1, tension: 50, friction: 20 }, // Настройки "пружины" для плавности
+  });
+
+  return (
+      // НОВОЕ: Используем анимированный компонент Line
+      <animated.Line
+          points={animatedProps.points}
+          stroke="black"
+          strokeWidth={2.5}
+          tension={0.5}
+          lineCap="round"
+          lineJoin="round"
+          shadowColor="black"
+          shadowBlur={5}
+          shadowOpacity={0.3}
+      />
+  );
+};
+
+================
+File: src/entities/Curve/index.ts
+================
+export { Curve } from './ui/Curve';
+export { useCurvePoints } from './model/use-curve-points';
+export type { CurveParams } from './model/use-curve-points';
+
+================
+File: src/entities/Primitive/ui/Primitive.tsx
+================
+// src/entities/Primitive/ui/Primitive.tsx
+
+import { Rect } from 'react-konva';
+import { Point } from '@/shared/types';
+import React from 'react';
+import Konva from 'konva';
+
+interface PrimitiveProps {
+  position: Point;
+  size: number;
+}
+
+// ИЗМЕНЕНО: Оборачиваем компонент в React.forwardRef
+export const Primitive = React.forwardRef<Konva.Rect, PrimitiveProps>(
+    ({ position, size }, ref) => {
+      return (
+          <Rect
+              // НОВОЕ: Привязываем полученный ref
+              ref={ref}
+              x={position.x - size / 2}
+              y={position.y - size / 2}
+              width={size}
+              height={size}
+              fill="blue"
+              shadowBlur={5}
+              shadowColor="black"
+              shadowOpacity={0.5}
+          />
+      );
+    }
+);
+
+================
+File: src/entities/Primitive/index.ts
+================
+export { Primitive } from './ui/Primitive';
+
+================
+File: src/features/AnimatePrimitive/model/use-primitive-animation.ts
+================
+// src/features/AnimatePrimitive/model/use-primitive-animation.ts
+
+import React, { useState, useRef, useCallback } from 'react';
+import Konva from 'konva';
+import { Point } from '@/shared/types';
+
+export const usePrimitiveAnimation = (
+    points: Point[],
+    primitiveRef: React.RefObject<Konva.Rect>
+) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationRef = useRef<Konva.Animation | null>(null);
+
+  const startAnimation = useCallback(() => {
+    // Проверяем, что узел Rect готов и анимация не запущена
+    if (points.length === 0 || isAnimating || !primitiveRef.current) {
+      return;
+    }
+
+    // Получаем слой напрямую из узла
+    const layer = primitiveRef.current.getLayer();
+    if (!layer) {
+      return;
+    }
+
+    animationRef.current = new Konva.Animation((frame) => {
+      if (!frame || !primitiveRef.current) return;
+
+      const duration = 5000;
+      const index = Math.floor((frame.time % duration) / duration * points.length);
+      const pos = points[index];
+
+      // Напрямую меняем позицию узла, минуя React
+      primitiveRef.current.position({
+        x: pos.x - primitiveRef.current.width() / 2,
+        y: pos.y - primitiveRef.current.height() / 2
+      });
+
+    }, layer);
+
+    animationRef.current.start();
+    setIsAnimating(true);
+
+  }, [points, isAnimating, primitiveRef]);
+
+  const stopAnimation = useCallback(() => {
+    if (animationRef.current) {
+      animationRef.current.stop();
+    }
+    setIsAnimating(false);
+  }, []);
+
+  // ПРОБЛЕМНЫЙ useEffect ПОЛНОСТЬЮ УДАЛЕН.
+  // ЭТО И ЕСТЬ ИСПРАВЛЕНИЕ.
+
+  return { isAnimating, startAnimation, stopAnimation };
+};
+
+================
+File: src/features/AnimatePrimitive/ui/AnimationControls.tsx
+================
+import { Button, HStack } from '@chakra-ui/react';
+
+interface AnimationControlsProps {
+  isAnimating: boolean;
+  onStart: () => void;
+  onStop: () => void;
+  disabled: boolean;
+}
+
+export const AnimationControls = ({ isAnimating, onStart, onStop, disabled }: AnimationControlsProps) => {
+  return (
+    <HStack>
+      <Button onClick={onStart} isDisabled={isAnimating || disabled} colorScheme="green">Старт</Button>
+      <Button onClick={onStop} isDisabled={!isAnimating || disabled} colorScheme="red">Стоп</Button>
+    </HStack>
+  );
+};
+
+================
+File: src/features/AnimatePrimitive/index.ts
+================
+export { AnimationControls } from './ui/AnimationControls';
+export { usePrimitiveAnimation } from './model/use-primitive-animation';
+
+================
+File: src/features/UpdateGraphParams/ui/GraphParamsForm.tsx
+================
+import { useEffect, useState } from 'react';
+import {
+  Box, FormControl, FormLabel, VStack, Heading, Slider,
+  SliderTrack, SliderFilledTrack, SliderThumb, Text, Icon
+} from '@chakra-ui/react';
+import { CurveParams } from '@/entities/Curve';
+import { motion } from 'framer-motion';
+import { FaSlidersH } from 'react-icons/fa';
+
+const MotionBox = motion(Box);
+
+// ИЗМЕНЕНО: Пропс теперь onParamsChange, так как отправки формы больше нет
+interface GraphParamsFormProps {
+  initialParams: CurveParams;
+  onParamsChange: (params: CurveParams) => void;
+}
+
+export const GraphParamsForm = ({ initialParams, onParamsChange }: GraphParamsFormProps) => {
+  const [params, setParams] = useState(initialParams);
+
+  // НОВОЕ: useEffect отслеживает изменения и передает их наверх
+  useEffect(() => {
+    onParamsChange(params);
+  }, [params, onParamsChange]);
+
+  const handleChange = (name: keyof CurveParams, value: number) => {
+    setParams(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+      <MotionBox
+          p={5}
+          borderWidth={1}
+          borderColor="whiteAlpha.300"
+          borderRadius="xl"
+          w="100%"
+          boxShadow="lg"
+          // НОВОЕ: Эффект "стекла"
+          bg="whiteAlpha.600"
+          _dark={{ bg: 'blackAlpha.600', borderColor: 'whiteAlpha.200' }}
+          backdropFilter="blur(10px)"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      >
+        <VStack spacing={5} align="stretch">
+          <Heading size="md" textAlign="center" display="flex" alignItems="center" justifyContent="center" gap={2}>
+            <Icon as={FaSlidersH} /> Параметры
+          </Heading>
+          {Object.keys(params).map((key) => (
+              <FormControl key={key}>
+                <FormLabel htmlFor={key} mb={1} fontSize="sm">
+                  <Text as="span" textTransform="capitalize" fontWeight="medium">{key}: </Text>
+                  <Text as="span" fontWeight="bold" color="blue.500" _dark={{ color: 'blue.300' }}>{params[key as keyof CurveParams]}</Text>
+                </FormLabel>
+                <Slider
+                    id={key}
+                    aria-label={`slider-${key}`}
+                    value={params[key as keyof CurveParams]}
+                    // ИЗМЕНЕНО: onChange теперь напрямую меняет состояние
+                    onChange={(val) => handleChange(key as keyof CurveParams, val)}
+                    min={key === 'scale' ? 10 : 1}
+                    // ИЗМЕНЕНО: Увеличен максимальный масштаб
+                    max={key === 'scale' ? 300 : 20}
+                    step={key === 'l' ? 0.5 : 1}
+                >
+                  <SliderTrack bg="blue.100" _dark={{ bg: 'whiteAlpha.300' }}><SliderFilledTrack bg="blue.500" _dark={{ bg: 'blue.300' }} /></SliderTrack>
+                  <SliderThumb boxSize={6} />
+                </Slider>
+              </FormControl>
+          ))}
+          {/* КНОПКА УДАЛЕНА */}
+        </VStack>
+      </MotionBox>
+  );
+};
+
+================
+File: src/features/UpdateGraphParams/index.ts
+================
+export { GraphParamsForm } from './ui/GraphParamsForm';
+
+================
+File: src/pages/GraphPage/ui/GraphPage.tsx
+================
+// src/pages/GraphPage/ui/GraphPage.tsx
+
+import { useState, useRef, useMemo, useEffect } from 'react';
+import {
+  Container, Grid, GridItem, VStack, Heading, Box, Text, Flex, Card, CardBody, CardHeader,
+  useColorMode, IconButton, Alert, AlertIcon
+} from '@chakra-ui/react';
+import { useElementSize } from '@/shared/lib/hooks/use-element-size';
+import { GraphViewer } from '@/widgets/GraphViewer';
+import { GraphParamsForm } from '@/features/UpdateGraphParams';
+import { AnimationControls, usePrimitiveAnimation } from '@/features/AnimatePrimitive';
+import { useCurvePoints, CurveParams } from '@/entities/Curve';
+import { Point } from '@/shared/types';
+import { motion } from 'framer-motion';
+import { FaSun, FaMoon, FaInfoCircle } from 'react-icons/fa';
+import Konva from 'konva';
+
+const SCENE_WIDTH = 1000;
+const SCENE_HEIGHT = 1000;
+const INITIAL_PARAMS: CurveParams = { a: 5, l: 4, scale: 80 };
+
+const useTypewriter = (text: string, speed = 50) => {
+  const [displayText, setDisplayText] = useState('');
+  useEffect(() => {
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayText(prev => prev + text.charAt(i));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, speed);
+    return () => clearInterval(typingInterval);
+  }, [text, speed]);
+  return displayText;
+};
+
+const MotionGridItem = motion(GridItem);
+
+export const GraphPage = () => {
+  const [params, setParams] = useState<CurveParams>(INITIAL_PARAMS);
+  const [primitivePosition, setPrimitivePosition] = useState<Point>({ x: -1000, y: -1000 });
+
+  const { colorMode, toggleColorMode } = useColorMode();
+  const typedTitle = useTypewriter("Визуализатор параметрических кривых");
+
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
+  const containerSize = useElementSize(canvasContainerRef);
+  const curvePoints = useCurvePoints(params, SCENE_WIDTH, SCENE_HEIGHT);
+
+  const layerRef = useRef<Konva.Layer>(null);
+  const primitiveRef = useRef<Konva.Rect>(null);
+
+  // ================= ОТЛАДОЧНЫЙ БЛОК =================
+  useEffect(() => {
+    if (primitiveRef.current) {
+      console.log('%c[GraphPage] Ref на узел <Primitive> успешно привязан!', 'color: green; font-weight: bold;', primitiveRef.current);
+    } else {
+      console.warn('[GraphPage] Ref на узел <Primitive> в данный момент null.');
+    }
+  }, [primitiveRef.current]); // Этот эффект будет срабатывать при изменении ref
+  // ================= КОНЕЦ ОТЛАДОЧНОГО БЛОКА =================
+
+  const scale = useMemo(() => {
+    if (!containerSize.width || !containerSize.height) return 1;
+    return Math.min(containerSize.width / SCENE_WIDTH, containerSize.height / SCENE_HEIGHT);
+  }, [containerSize]);
+
+  const { isAnimating, startAnimation, stopAnimation } = usePrimitiveAnimation(curvePoints, primitiveRef);
+
+  const handleParamsChange = (newParams: CurveParams) => {
+    if (isAnimating) stopAnimation();
+    setParams(newParams);
+  };
+
+  useEffect(() => {
+    if (curvePoints.length > 0) {
+      const initialPos = curvePoints[0];
+      setPrimitivePosition(initialPos);
+
+      if (primitiveRef.current) {
+        const primitiveNode = primitiveRef.current;
+        primitiveNode.position({
+          x: initialPos.x - primitiveNode.width() / 2,
+          y: initialPos.y - primitiveNode.height() / 2,
+        });
+        primitiveNode.getLayer()?.batchDraw();
+      }
+    }
+  }, [params, curvePoints]);
+
+  const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
+
+  return (
+      <Box _dark={{ bgGradient: 'linear(to-br, gray.800, blue.900)' }} _light={{ bgGradient: 'linear(to-br, gray.50, blue.100)' }} minH="100vh">
+        <Container maxW="container.2xl" p={{ base: 4, md: 8 }}>
+          <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
+            <Flex justify="space-between" align="center" mb={6}>
+              <motion.div variants={itemVariants}>
+                <Heading as="h1" size="xl" bgGradient="linear(to-r, blue.500, purple.500)" bgClip="text">
+                  {typedTitle}
+                </Heading>
+                <Text fontSize="lg" color="gray.500" _dark={{ color: 'gray.400' }} mt={1}>
+                  Вариант №23: Подера (Улитка Паскаля)
+                </Text>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <IconButton
+                    aria-label="Toggle theme"
+                    icon={colorMode === 'light' ? <FaMoon /> : <FaSun />}
+                    onClick={toggleColorMode}
+                    isRound
+                    size="lg"
+                    variant="ghost"
+                />
+              </motion.div>
+            </Flex>
+
+            <motion.div variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } } }}>
+              <Grid templateColumns={{ base: '1fr', lg: '350px 1fr' }} gap={8} w="100%">
+                <MotionGridItem variants={itemVariants}>
+                  <VStack spacing={6}>
+                    <GraphParamsForm initialParams={params} onParamsChange={handleParamsChange} />
+                    <Card as={motion.div} w="100%" variant="outline" bg="whiteAlpha.600" _dark={{ bg: 'blackAlpha.600' }} backdropFilter="blur(10px)" borderRadius="xl" whileHover={{ y: -5, transition: { duration: 0.2 } }}>
+                      <CardHeader pb={2}><Heading size="md">Управление анимацией</Heading></CardHeader>
+                      <CardBody><AnimationControls isAnimating={isAnimating} onStart={startAnimation} onStop={stopAnimation} disabled={curvePoints.length === 0} /></CardBody>
+                    </Card>
+                    <Alert status='info' borderRadius="xl" bg="whiteAlpha.600" _dark={{ bg: 'blackAlpha.600' }} backdropFilter="blur(10px)">
+                      <AlertIcon as={FaInfoCircle} />
+                      <Text fontSize="sm">Изменяйте параметры 'a' и 'l', чтобы увидеть, как Улитка Паскаля меняет свою форму в реальном времени.</Text>
+                    </Alert>
+                  </VStack>
+                </MotionGridItem>
+
+                <MotionGridItem as={Card} p={2} ref={canvasContainerRef} h={{ base: '50vh', lg: '70vh' }} display="flex" alignItems="center" justifyContent="center" overflow="hidden" variants={itemVariants} bg="whiteAlpha.700" _dark={{ bg: 'blackAlpha.500' }} backdropFilter="blur(5px)" borderRadius="2xl">
+                  <GraphViewer layerRef={layerRef} primitiveRef={primitiveRef} width={SCENE_WIDTH} height={SCENE_HEIGHT} scale={scale} curvePoints={curvePoints} primitivePosition={primitivePosition} />
+                </MotionGridItem>
+              </Grid>
+            </motion.div>
+          </motion.div>
+        </Container>
+      </Box>
+  );
+};
+
+================
+File: src/pages/GraphPage/index.ts
+================
+export { GraphPage } from './ui/GraphPage';
+
+================
+File: src/shared/lib/hooks/use-element-size.ts
+================
+import { useState, useLayoutEffect, RefObject } from 'react';
+
+export function useElementSize<T extends HTMLElement>(elementRef: RefObject<T>) {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    const observer = new ResizeObserver(() => {
+      setSize({
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+      });
+    });
+
+    observer.observe(element);
+    // Устанавливаем начальный размер
+    setSize({ width: element.offsetWidth, height: element.offsetHeight });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [elementRef]);
+
+  return size;
+}
+
+================
+File: src/shared/types/index.ts
+================
+export type Point = {
+  x: number;
+  y: number;
+};
+
+================
+File: src/widgets/GraphViewer/ui/GraphViewer.tsx
+================
+// src/widgets/GraphViewer/ui/GraphViewer.tsx
+
+import { Stage, Layer } from 'react-konva';
+import { Curve } from '@/entities/Curve';
+import { Primitive } from '@/entities/Primitive';
+import { Point } from '@/shared/types';
+import Konva from 'konva';
+import React from 'react';
+
+interface GraphViewerProps {
+    width: number;
+    height: number;
+    scale: number;
+    curvePoints: Point[];
+    primitivePosition: Point;
+    layerRef: React.RefObject<Konva.Layer>;
+    // НОВОЕ: Пропс для ref на сам примитив
+    primitiveRef: React.RefObject<Konva.Rect>;
+}
+
+export const GraphViewer = ({ width, height, scale, curvePoints, primitivePosition, layerRef, primitiveRef }: GraphViewerProps) => {
+    return (
+        <Stage
+            width={width}
+            height={height}
+            scaleX={scale}
+            scaleY={scale}
+        >
+            <Layer ref={layerRef}>
+                <Curve points={curvePoints} />
+                {curvePoints.length > 0 && (
+                    // ИЗМЕНЕНО: Передаем ref в компонент Primitive
+                    <Primitive ref={primitiveRef} position={primitivePosition} size={15} />
+                )}
+            </Layer>
+        </Stage>
+    );
+};
+
+================
+File: src/widgets/GraphViewer/index.ts
+================
+export { GraphViewer } from './ui/GraphViewer';
+
+================
+File: src/index.css
+================
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light; /* Force light mode for consistency */
+  color: #213547;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+}
+
+================
+File: src/main.tsx
+================
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { GraphPage } from './pages/GraphPage';
+import { withChakra } from './app/providers/with-chakra';
+import './index.css';
+
+const App = withChakra(GraphPage);
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
+
+================
+File: src/vite-env.d.ts
+================
+/// <reference types="vite/client" />
+
+================
+File: .gitignore
+================
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+================
+File: eslint.config.js
+================
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+)
+
+================
+File: index.html
+================
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+================
+File: package.json
+================
+{
+  "name": "practice-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@react-spring/konva": "^9.7.5",
+    "@react-spring/web": "^9.7.5",
+    "framer-motion": "^10.18.0",
+    "konva": "^9.3.20",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "react-konva": "^18.2.10"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/node": "^24.0.3",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
+  }
+}
+
+================
+File: README.md
+================
+# React + TypeScript + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
+
+================
+File: tsconfig.app.json
+================
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}
+
+================
+File: tsconfig.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+
+================
+File: tsconfig.node.json
+================
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+================
+File: vite.config.ts
+================
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+})
+
+
+
+================================================================
+End of Codebase
+================================================================
