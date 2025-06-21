@@ -38,10 +38,7 @@ export const GraphPage = () => {
   const layerRef = useRef<Konva.Layer>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Вызываем хук useCurvePoints напрямую на верхнем уровне.
-  // Он уже содержит useMemo внутри себя, поэтому это безопасно и правильно.
   const curvePoints = useCurvePoints(params);
-
   const canvasSize = useElementSize(containerRef);
 
   const { autoScale, bounds } = useMemo(() => {
@@ -63,10 +60,10 @@ export const GraphPage = () => {
   const finalScale = autoScale * manualZoom;
   const primitiveScreenSz = Math.max(3, BASE_PRIMITIVE_SIZE / finalScale);
 
-  const { isAnimating, startAnimation, stopAnimation, setLayer }
-      = usePrimitiveAnimation(curvePoints, setPrimitivePos);
+  // ИСПРАВЛЕНИЕ: Передаем `layerRef` напрямую в хук
+  const { isAnimating, startAnimation, stopAnimation }
+      = usePrimitiveAnimation(curvePoints, setPrimitivePos, layerRef);
 
-  // Этот useEffect теперь будет стабильно работать.
   useEffect(() => {
     stopAnimation();
     if (curvePoints.length > 0) {
@@ -74,11 +71,12 @@ export const GraphPage = () => {
     }
   }, [params, stopAnimation]);
 
-  useEffect(() => {
-    if (layerRef.current) {
-      setLayer(layerRef.current);
-    }
-  }, [setLayer]);
+  // ИСПРАВЛЕНИЕ: Этот useEffect больше не нужен, его можно удалить.
+  // useEffect(() => {
+  //   if (layerRef.current) {
+  //     setLayer(layerRef.current);
+  //   }
+  // }, [setLayer]);
 
   return (
       <Box minH="100vh" bg="gray.50">
