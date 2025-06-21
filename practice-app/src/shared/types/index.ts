@@ -7,8 +7,7 @@ export interface CurveParams {
   a: number;
   k: number;  // Исправлено с l на k
   steps: number;
-  turnsCount: number;
-  scale?: number; // Опциональный параметр
+  turnsCount: number;// Опциональный параметр
 }
 export type Bounds = {
   minX: number;

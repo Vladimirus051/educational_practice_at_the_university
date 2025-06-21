@@ -13,7 +13,7 @@ import { GraphViewer } from '@/widgets/GraphViewer';
 import { Primitive } from '@/entities/Primitive';
 import { useElementSize } from '@/shared/lib/hooks/use-element-size';
 
-const INITIAL_PARAMS: CurveParams = { a: 1, k: 2, steps: 1000, turnsCount: 10 };
+const INITIAL_PARAMS: CurveParams = { a: 20, k: 2, steps: 1000, turnsCount: 10 };
 const MAX_AUTO_SCALE = 100;
 const BASE_PRIMITIVE_SIZE = 15;
 

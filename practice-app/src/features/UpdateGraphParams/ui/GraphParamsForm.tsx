@@ -54,7 +54,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
     const resetToDefaults = () => {
         // ИСПРАВЛЕНИЕ: Значения по умолчанию теперь согласованы с INITIAL_PARAMS
         const defaultParams: CurveParams = {
-            a: 1,
+            a: 20,
             k: 2,
             steps: 1000,
             turnsCount: 10
