@@ -1,12 +1,10 @@
 import { Button, HStack } from '@chakra-ui/react';
-
 interface AnimationControlsProps {
   isAnimating: boolean;
   onStart: () => void;
   onStop: () => void;
   disabled: boolean;
 }
-
 export const AnimationControls = ({ isAnimating, onStart, onStop, disabled }: AnimationControlsProps) => {
   return (
     <HStack>

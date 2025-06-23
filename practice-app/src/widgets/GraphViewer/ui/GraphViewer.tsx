@@ -5,7 +5,6 @@ import { PolarGrid } from '@/entities/Curve/ui/PolarGrid';
 import { CartesianAxes } from '@/entities/Curve/ui/CartesianAxes';
 import { Point } from '@/shared/types';
 import Konva from 'konva';
-
 interface GraphViewerProps {
     width: number;
     height: number;
@@ -17,14 +16,12 @@ interface GraphViewerProps {
     draggable?: boolean;
     coordinateSystem: 'cartesian' | 'polar';
 }
-
 export const GraphViewer = forwardRef<Konva.Layer, GraphViewerProps>(
     ({ width, height, scale, curvePoints, children, offsetX, offsetY, draggable, coordinateSystem }, ref) => {
         const maxRadius = React.useMemo(() => {
             if (curvePoints.length === 0) return 1;
             return Math.max(...curvePoints.map(p => Math.sqrt(p.x * p.x + p.y * p.y)));
         }, [curvePoints]);
-
         return (
             <Stage
                 width={width}
@@ -38,15 +35,13 @@ export const GraphViewer = forwardRef<Konva.Layer, GraphViewerProps>(
                 draggable={draggable}
             >
                 <Layer ref={ref}>
-                    {/* Условный рендеринг сеток */}
+                    
                     {coordinateSystem === 'polar' && (
                         <PolarGrid width={width} height={height} maxRadius={maxRadius} />
                     )}
                     {coordinateSystem === 'cartesian' && (
-                        // ИСПРАВЛЕНИЕ: Передаем только нужные пропсы, без bounds
                         <CartesianAxes width={width} height={height} scale={scale} offsetX={offsetX} offsetY={offsetY} />
                     )}
-
                     <Curve points={curvePoints} />
                     {children}
                 </Layer>
@@ -54,5 +49,4 @@ export const GraphViewer = forwardRef<Konva.Layer, GraphViewerProps>(
         );
     }
 );
-
 GraphViewer.displayName = 'GraphViewer';

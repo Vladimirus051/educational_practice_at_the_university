@@ -2,12 +2,10 @@ import { forwardRef } from 'react';
 import Konva from 'konva';
 import { Rect } from 'react-konva';
 import { Point } from '@/shared/types';
-
 interface PrimitiveProps {
-    position: Point; // математические координаты внутри Stage
-    size: number;    // итогу­вый размер в пикселях экрана(!)
+    position: Point; 
+    size: number;    
 }
-
 export const Primitive = forwardRef<Konva.Rect, PrimitiveProps>(
     ({ position, size }, ref) => (
         <Rect

@@ -2,12 +2,11 @@ export type Point = {
   x: number;
   y: number;
 };
-
 export interface CurveParams {
   a: number;
-  k: number;  // Исправлено с l на k
+  k: number;  
   steps: number;
-  turnsCount: number;// Опциональный параметр
+  turnsCount: number;
 }
 export type Bounds = {
   minX: number;

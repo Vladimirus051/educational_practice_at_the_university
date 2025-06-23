@@ -17,30 +17,23 @@ import {
     Divider,
     Flex
 } from '@chakra-ui/react';
-
 interface GraphParamsFormProps {
     initialParams: CurveParams;
     onParamsChange: (params: CurveParams) => void;
-    // НОВОЕ: Пропсы для управления масштабом
     manualZoom: number;
     onZoomChange: (zoom: number) => void;
 }
-
 export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZoomChange }: GraphParamsFormProps) => {
     const [params, setParams] = useState<CurveParams>(initialParams);
-
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             onParamsChange(params);
         }, 100);
-
         return () => clearTimeout(timeoutId);
     }, [params, onParamsChange]);
-
     useEffect(() => {
         setParams(initialParams);
     }, [initialParams]);
-
     const updateParam = <K extends keyof CurveParams>(
         key: K,
         value: CurveParams[K]
@@ -50,9 +43,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
             [key]: value
         }));
     };
-
     const resetToDefaults = () => {
-        // ИСПРАВЛЕНИЕ: Значения по умолчанию теперь согласованы с INITIAL_PARAMS
         const defaultParams: CurveParams = {
             a: 20,
             k: 2,
@@ -60,13 +51,11 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
             turnsCount: 10
         };
         setParams(defaultParams);
-        onZoomChange(1); // Также сбрасываем ручной зум
+        onZoomChange(1); 
     };
-
-
     return (
         <VStack spacing={6} align="stretch">
-            {/* НОВОЕ: Слайдер для ручного масштабирования */}
+            
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Масштаб (зум): {manualZoom.toFixed(2)}x
@@ -88,10 +77,8 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <Text fontSize="xs" color="gray.500">5.0x</Text>
                 </Flex>
             </FormControl>
-
             <Divider />
-
-            {/* Параметр a */}
+            
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Параметр 'a' (радиус): {params.a}
@@ -101,8 +88,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-
-            {/* Параметр k */}
+            
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Параметр 'k' (форма): {params.k}
@@ -112,8 +98,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-
-            {/* Количество шагов */}
+            
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Количество точек: {params.steps}
@@ -123,8 +108,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-
-            {/* Количество оборотов */}
+            
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Количество оборотов: {params.turnsCount}
@@ -134,16 +118,14 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-
-            {/* Точный ввод значений и остальная часть формы... */}
-            {/* ... (остальной код формы без изменений) ... */}
+            
+            
             <Box pt={4}>
                 <Divider />
                 <Button onClick={resetToDefaults} w="full" mt={4} variant="outline">
                     Сбросить к значениям по умолчанию
                 </Button>
             </Box>
-
             <Box pt={4}>
                 <Divider />
                 <Heading as="h4" size="sm" fontWeight="medium" my={2}>
