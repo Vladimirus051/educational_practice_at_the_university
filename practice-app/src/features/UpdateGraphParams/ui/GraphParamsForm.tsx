@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CurveParams } from '@/shared/types';
 import {
     Box,
     Button,
     FormControl,
     FormLabel,
-    Grid,
     Heading,
-    Input,
     Slider,
     SliderFilledTrack,
     SliderThumb,
@@ -48,14 +46,13 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
             a: 20,
             k: 2,
             steps: 1000,
-            turnsCount: 10
         };
         setParams(defaultParams);
-        onZoomChange(1); 
+        onZoomChange(1);
     };
     return (
         <VStack spacing={6} align="stretch">
-            
+
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Масштаб (зум): {manualZoom.toFixed(2)}x
@@ -78,7 +75,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                 </Flex>
             </FormControl>
             <Divider />
-            
+
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Параметр 'a' (радиус): {params.a}
@@ -88,7 +85,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-            
+
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Параметр 'k' (форма): {params.k}
@@ -98,7 +95,7 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-            
+
             <FormControl>
                 <FormLabel fontSize="sm" fontWeight="medium">
                     Количество точек: {params.steps}
@@ -108,18 +105,6 @@ export const GraphParamsForm = ({ initialParams, onParamsChange, manualZoom, onZ
                     <SliderThumb />
                 </Slider>
             </FormControl>
-            
-            <FormControl>
-                <FormLabel fontSize="sm" fontWeight="medium">
-                    Количество оборотов: {params.turnsCount}
-                </FormLabel>
-                <Slider min={1} max={20} step={1} value={params.turnsCount} onChange={(val) => updateParam('turnsCount', val)} >
-                    <SliderTrack><SliderFilledTrack /></SliderTrack>
-                    <SliderThumb />
-                </Slider>
-            </FormControl>
-            
-            
             <Box pt={4}>
                 <Divider />
                 <Button onClick={resetToDefaults} w="full" mt={4} variant="outline">

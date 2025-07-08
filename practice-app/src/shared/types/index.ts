@@ -4,9 +4,8 @@ export type Point = {
 };
 export interface CurveParams {
   a: number;
-  k: number;  
+  k: number;
   steps: number;
-  turnsCount: number;
 }
 export type Bounds = {
   minX: number;
@@ -16,3 +15,7 @@ export type Bounds = {
   width: number;
   height: number;
 };
+export interface AnimationParams {
+  speed: number;
+  loops: number;
+}
