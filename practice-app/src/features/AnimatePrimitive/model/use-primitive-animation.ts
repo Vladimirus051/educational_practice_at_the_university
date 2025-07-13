@@ -45,7 +45,9 @@ export const usePrimitiveAnimation = (
 
         const elapsedTime = frame.time - startTimeRef.current;
         const baseDuration = 8000;
-        const totalDuration = (baseDuration / animationParams.speed) * animationParams.loops;
+        const singleCycleDuration = baseDuration / animationParams.speed;
+        const totalDuration = singleCycleDuration * animationParams.loops;
+
 
         if (elapsedTime >= totalDuration) {
           setIsCompleted(true);
@@ -54,8 +56,8 @@ export const usePrimitiveAnimation = (
           return;
         }
 
-        const progress = elapsedTime / totalDuration;
-        const pointIndex = Math.floor(progress * points.length);
+        const cycleProgress = (elapsedTime % singleCycleDuration) / singleCycleDuration;
+        const pointIndex = Math.floor(cycleProgress * points.length);
         const safeIndex = Math.min(pointIndex, points.length - 1);
 
         onPositionUpdate(points[safeIndex]);
